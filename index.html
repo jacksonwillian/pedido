@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido</title>
+
+    <style>
+
+        @font-face {
+            font-family: josephsophiaFonte;
+            src: url(fonts/josephsophia.ttf);
+            font-weight: normal;
+            font-style: normal;
+        }
+          
+
+        body {
+            background-color: #000 !important;
+            color: #ffff;
+            font-weight: 900;
+            font-family: Arial, Helvetica, sans-serif;
+
+        }
+
+        .pedido {
+            margin: auto;
+            display: block;
+            width: 300px;
+            min-height: 200px;
+            padding-top: 50px;
+
+        }
+
+        .pedido .pergunta {
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .pedido .resposta {
+            margin: 20px;
+            height: 100px;
+            margin-top: 50px;
+            display: block;
+        }
+
+        .pedido .resposta button {
+            width: 50px;
+            font-size: 1.2em;
+        }
+
+        button#btn-sim {
+            position: fixed;
+            display: block;
+            margin-left: 35px;
+        }
+
+        button#btn-nao {
+            position: absolute;
+            margin-left: 180px;
+        }
+
+        button.esquerda {
+            margin-left: 116px !important;
+        }
+
+        button.direita {
+            margin-left: 250px !important;
+        }
+
+        button.cima {
+            margin-top: -40px !important;
+        }
+
+        button.baixo {
+            margin-top: 40px !important;
+        }
+
+        #ops {
+            color:red;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            display: none;
+        }
+
+
+        .video {
+            display: none;
+            margin: auto;
+            width: 300px;
+            margin-top: 80px;
+
+        }
+
+        #legenda {
+            text-align: center;
+            display: block;
+            color: red;
+            font-size: 3em;
+            font-family: josephsophiaFonte;
+            padding-left: 6px;
+            padding-top: 2px;
+        }
+
+        #iframe-container {
+            margin-top: 10px;
+        }
+
+
+        .heart {
+            margin: auto;
+            width: 50px;
+            height: 50px;
+            position: relative;
+            background-color: red;
+            transform: rotate(-45deg);
+            animation: beat 1s infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+        }
+
+        .heart::before {
+            top: 0;
+            left: 25px;
+        }
+
+        .heart::after {
+            top: -25px;
+            left: 0;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(-45deg);
+            }
+
+            50% {
+                transform: scale(1.2) rotate(-45deg);
+            }
+        }
+
+        .hidden-iframe {
+            position: absolute; /* Remove o iframe do fluxo do layout */
+            width: 0; /* Define a largura como 0 */
+            height: 0; /* Define a altura como 0 */
+            opacity: 0; /* Torna o iframe invisível */
+            border: none; /* Remove bordas */
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="pedido">
+
+        <div class="pergunta">Você Quer Ser Minha Namorada?</div>
+        <div class="resposta">
+            <button id="btn-sim" onclick="sim()">Sim</button>
+            <button id="btn-nao" onclick="nao()" onmouseover="nao()">Não</button>
+        </div>
+
+        <br>
+
+        <span id="ops">
+            Ops...
+        </span>
+    </div>
+
+
+    <div class="video">
+
+        <div class="heart"></div>
+
+        <div id="iframe-container"></div>
+        <br>
+        <br>
+
+        <span id="legenda">
+            Ane e Jackson
+            <br>
+            🥳🎊🥳
+        </span>
+
+    </div>
+
+
+    <script>
+
+        let index = null;
+        const direcao = { 1: 'esquerda', 2: 'direita', 3: 'cima', 4: 'baixo', 5: '' };
+        const min = 1;
+        const max = 5;
+        const btnNaoElemento = document.querySelector("#btn-nao");
+        const opsElemento = document.querySelector("#ops");
+        const pedidoElemento = document.querySelector('.pedido');
+        const videoElemento = document.querySelector('.video');
+
+        function sim() {
+            pedidoElemento.style.display = 'none';
+            videoElemento.style.display = 'block';
+
+            const iframeHTML = `
+            <iframe 
+                class="hidden-iframe"
+                width="300" 
+                height="200" 
+                src="https://www.youtube.com/embed/HR4ZxjGQGYY?si=lCPPIfRcupY87m9v&amp;autoplay=1"
+                title="YouTube video player" 
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen>
+            </iframe>
+        `;
+
+            // Seleciona o contêiner onde o iframe será adicionado
+            const container = document.getElementById("iframe-container");
+
+            // Adiciona o iframe ao contêiner usando innerHTML
+            container.innerHTML = iframeHTML;
+        }
+
+        function nao() {
+            let atualIndex = null;
+            do {
+                atualIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+            } while (index === atualIndex);
+            index = atualIndex;
+
+            btnNaoElemento.className = direcao[index];
+            opsElemento.style.display = 'block';
+            setTimeout(() => {
+                opsElemento.style.display = 'none';
+            }, 500)
+        }
+
+    </script>
+</body>
+
+</html>
